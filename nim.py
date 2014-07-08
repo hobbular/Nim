@@ -14,13 +14,15 @@ human_move = True    # this is how we'll track whose turn it is
 # Displays the current state of the board
 #############################################
 def display_board(board):
+    print
     space_count = 0
     for line in board:
-        print (space_count*' '),
+        print str(space_count+1)+": "+(space_count*' '),
         for item in line:
             print item,
-        print
+        print (space_count*' ')+" ("+str(count_sticks(line))+")"
         space_count += 1
+    print
 
 #############################################
 # Changes the board based on the chosen move.
@@ -45,14 +47,14 @@ def make_move(board,pile,count):
 #############################################
 # Count number of sticks in a given row
 #############################################
-def count_sticks(board,row):
-    return sum(1 for x in board[row] if x == '|')
+def count_sticks(line):
+    return sum(1 for x in line if x == '|')
 
 #############################################
 # Count number of sticks left on the board
 #############################################
 def count_board(board):
-    return sum(count_sticks(board,x) for x in range(len(board)))
+    return sum(count_sticks(board[x]) for x in range(len(board)))
 
 #############################################
 # PLAY THE GAME!!
@@ -77,13 +79,13 @@ while '|' in board[0] or '|' in board[1] or '|' in board[2] or '|' in board[3]:
     # if it's the computer's turn:
     while not human_move:
         pile_num = random.randint(0,3)
-        while count_sticks(board,pile_num) == 0:
+        while count_sticks(board[pile_num]) == 0:
             pile_num = random.randint(0,3)
-        if count_board(board) == count_sticks(board,pile_num)+1:
+        if count_board(board) == count_sticks(board[pile_num])+1:
             # if it's about to win, have it take everything in that pile
-            how_many = count_sticks(board,pile_num)
+            how_many = count_sticks(board[pile_num])
         else:
-            how_many = random.randint(1,count_sticks(board,pile_num))
+            how_many = random.randint(1,count_sticks(board[pile_num]))
         success = make_move(board,pile_num,how_many)
         if success:
             print "Computer removed",how_many,"sticks from pile",pile_num+1

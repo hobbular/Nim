@@ -43,6 +43,12 @@ def make_move(board,pile,count):
     return True
 
 #############################################
+# Count number of sticks in a given row
+#############################################
+def count_sticks(board,row):
+    return sum(1 for x in board[row] if x == '|')
+
+#############################################
 # PLAY THE GAME!!
 #############################################
 while '|' in board[0] or '|' in board[1] or '|' in board[2] or '|' in board[3]:
@@ -68,7 +74,9 @@ while '|' in board[0] or '|' in board[1] or '|' in board[2] or '|' in board[3]:
         # TODO: MAKE THE COMPUTER CHOOSE A MOVE
         ###########################################
         pile_num = random.randint(0,3)
-        how_many = random.randint(1,5)
+        while count_sticks(board,pile_num) == 0:
+            pile_num = random.randint(0,3)
+        how_many = random.randint(1,count_sticks(board,pile_num))
         success = make_move(board,pile_num,how_many)
         if success:
             print "Computer removed",how_many,"sticks from pile",pile_num+1
